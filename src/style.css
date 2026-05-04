@@ -667,13 +667,15 @@ ul {
 
 .contact-item a, .contact-item p {
   font-size: 1.1rem;
-  color: var(--text-light);
+  color: var(--primary); /* Changed to primary color */
   text-decoration: none;
   transition: var(--transition-fast);
+  font-weight: 500;
 }
 
 .contact-item a:hover {
-  color: var(--primary);
+  filter: brightness(120%);
+  text-decoration: underline;
 }
 
 .contact-form-wrapper {
