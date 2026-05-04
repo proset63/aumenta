@@ -606,16 +606,24 @@ ul {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
-  filter: grayscale(100%) brightness(200%) opacity(0.6);
+  filter: none;
   transition: var(--transition-fast);
+}
+
+.client-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  height: 80px;
+  padding: 1.2rem;
+  border-radius: var(--radius-md);
+  background: white; /* White background for visibility */
+  transition: var(--transition-fast);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .client-logo:hover {
   transform: translateY(-5px);
-  border-color: rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.client-logo:hover img {
-  filter: grayscale(0%) brightness(100%) opacity(1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
