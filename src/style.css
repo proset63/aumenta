@@ -603,8 +603,8 @@ ul {
 }
 
 .client-logo img {
-  max-width: 100%;
-  max-height: 100%;
+  width: 90%;
+  height: 90%;
   object-fit: contain;
   filter: none;
   transition: var(--transition-fast);
@@ -614,11 +614,11 @@ ul {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 150px;
-  height: 80px;
-  padding: 1.2rem;
+  width: 180px; /* Slightly wider */
+  height: 100px; /* Slightly taller */
+  padding: 0.8rem; /* Less padding to make logos bigger */
   border-radius: var(--radius-md);
-  background: white; /* White background for visibility */
+  background: white;
   transition: var(--transition-fast);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
