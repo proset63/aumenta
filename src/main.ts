@@ -1,4 +1,43 @@
 import './style.css';
+import { supabase } from './supabaseClient';
+
+// --- Supabase Data Loading ---
+
+async function loadDynamicContent() {
+  const { data, error } = await supabase.from('site_content').select('*');
+  if (error) {
+    console.error('Error fetching content:', error);
+    return;
+  }
+
+  data.forEach((item: { key: string; value: string }) => {
+    const element = document.getElementById(item.key);
+    if (element) {
+      element.innerHTML = item.value;
+    }
+  });
+}
+
+async function loadClients() {
+  const { data, error } = await supabase.from('clients').select('*');
+  if (error) {
+    console.error('Error fetching clients:', error);
+    return;
+  }
+
+  const grid = document.getElementById('clients-grid');
+  if (grid && data.length > 0) {
+    grid.innerHTML = data.map(client => `
+      <div class="client-logo">
+        <img src="${client.logo_url}" alt="${client.name}">
+      </div>
+    `).join('');
+  }
+}
+
+// Initial Load
+loadDynamicContent();
+loadClients();
 
 // Navigation scroll effect
 const navbar = document.querySelector('.navbar');
@@ -22,8 +61,6 @@ const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       entry.target.classList.add('visible');
-      // Optional: Stop observing once visible if you want it to happen only once
-      // observer.unobserve(entry.target);
     }
   });
 }, observerOptions);
@@ -51,25 +88,38 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // Contact Form Handling
 const contactForm = document.querySelector('.contact-form') as HTMLFormElement;
 if (contactForm) {
-  contactForm.addEventListener('submit', (e) => {
+  contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const submitBtn = contactForm.querySelector('button[type="submit"]') as HTMLButtonElement;
     const originalText = submitBtn.innerText;
     
-    // Simulate sending
+    // Get form data
+    const formData = {
+      name: (document.getElementById('name') as HTMLInputElement).value,
+      email: (document.getElementById('email') as HTMLInputElement).value,
+      message: (document.getElementById('message') as HTMLTextAreaElement).value,
+    };
+
+    // Simulate sending + Supabase storage
     submitBtn.innerText = 'Enviando...';
     submitBtn.disabled = true;
     
-    setTimeout(() => {
+    const { error } = await supabase.from('contact_leads').insert([formData]);
+
+    if (error) {
+      console.error('Error saving lead:', error);
+      submitBtn.innerText = 'Error al enviar';
+      submitBtn.style.background = '#ef4444'; // Red
+    } else {
       submitBtn.innerText = '¡Enviado con éxito!';
       submitBtn.style.background = '#10b981'; // Green
       contactForm.reset();
-      
-      setTimeout(() => {
-        submitBtn.innerText = originalText;
-        submitBtn.disabled = false;
-        submitBtn.style.background = '';
-      }, 3000);
-    }, 1500);
+    }
+    
+    setTimeout(() => {
+      submitBtn.innerText = originalText;
+      submitBtn.disabled = false;
+      submitBtn.style.background = '';
+    }, 3000);
   });
 }
