@@ -168,26 +168,24 @@ ul {
 .logo {
   display: flex;
   align-items: center;
+  height: 50px; /* Base height */
 }
 
 .main-logo {
-  height: 60px; /* Strong mobile presence */
+  height: 100%;
   width: auto;
-  filter: brightness(0) invert(1); /* Invert black to white */
-  mix-blend-mode: screen; /* REMOVES ANY BLACK BOX/BACKGROUND */
+  max-width: 280px;
+  object-fit: contain;
   transition: var(--transition-normal);
   display: block;
 }
 
 @media (min-width: 1024px) {
-  .main-logo {
-    height: 90px; /* Imposing desktop presence */
-  }
+  .logo { height: 70px; }
+  .main-logo { max-width: 350px; }
 }
 
-.navbar.scrolled .main-logo {
-  height: 50px;
-}
+.navbar.scrolled .logo { height: 40px; }
 
 .navbar nav {
   display: flex;
