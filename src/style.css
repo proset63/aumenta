@@ -595,38 +595,30 @@ ul {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 150px;
-  height: 80px;
-  padding: 1.5rem;
-  border-radius: var(--radius-md);
-  transition: var(--transition-fast);
+  width: 160px;
+  height: 90px;
+  padding: 1rem;
+  transition: all var(--transition-normal);
 }
 
 .client-logo img {
-  width: 90%;
-  height: 90%;
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
-  filter: none;
-  transition: var(--transition-fast);
-}
-
-.client-logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 180px; /* Slightly wider */
-  height: 100px; /* Slightly taller */
-  padding: 0.8rem; /* Less padding to make logos bigger */
-  border-radius: var(--radius-md);
-  background: white;
-  transition: var(--transition-fast);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  /* Always white logos */
+  filter: brightness(0) invert(1) opacity(0.8);
+  transition: all var(--transition-normal);
 }
 
 .client-logo:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
+
+.client-logo:hover img {
+  opacity: 1;
+  filter: brightness(0) invert(1) drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+}
+
 
 /* Contact Section & Form */
 .contact-container {

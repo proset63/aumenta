@@ -13,7 +13,11 @@ async function loadDynamicContent() {
   data.forEach((item: { key: string; value: string }) => {
     const element = document.getElementById(item.key);
     if (element) {
-      element.innerHTML = item.value;
+      if (element.tagName.toLowerCase() === 'img') {
+        (element as HTMLImageElement).src = item.value;
+      } else {
+        element.innerHTML = item.value;
+      }
     }
   });
 }
@@ -26,8 +30,13 @@ async function loadClients() {
   }
 
   const grid = document.getElementById('clients-grid');
-  if (grid && data.length > 0) {
-    grid.innerHTML = data.map(client => `
+  if (grid && data && data.length > 0) {
+    // Filter duplicates by name to ensure each client only appears once
+    const uniqueClients = data.filter((client, index, self) =>
+      index === self.findIndex((c) => c.name === client.name)
+    );
+
+    grid.innerHTML = uniqueClients.map(client => `
       <div class="client-logo">
         <img src="${client.logo_url}" alt="${client.name}">
       </div>
