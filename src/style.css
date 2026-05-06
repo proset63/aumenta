@@ -166,14 +166,25 @@ ul {
 }
 
 .logo {
-  font-family: var(--font-heading);
-  font-size: 1.75rem;
-  font-weight: 800;
-  color: #fff;
-  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
 }
-.logo span {
-  color: var(--accent-cyan);
+
+.main-logo {
+  height: 32px;
+  width: auto;
+  filter: brightness(0) invert(1); /* Inverts the black logo to white */
+  transition: var(--transition-normal);
+}
+
+@media (min-width: 1024px) {
+  .main-logo {
+    height: 40px;
+  }
+}
+
+.navbar.scrolled .main-logo {
+  height: 28px;
 }
 
 .navbar nav {
@@ -706,4 +717,84 @@ ul {
 
 .border-t {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* --- MODAL SYSTEM --- */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-content {
+  background: rgba(20, 20, 25, 0.95);
+  padding: 3rem;
+  border-radius: var(--radius-lg);
+  max-width: 800px;
+  width: 100%;
+  position: relative;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.close-modal {
+  position: absolute;
+  top: 1.5rem;
+  right: 2rem;
+  font-size: 2.5rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  line-height: 1;
+  transition: var(--transition-fast);
+}
+
+.close-modal:hover {
+  color: var(--accent-cyan);
+}
+
+#modal-title {
+  margin-bottom: 1rem;
+  font-size: 2rem;
+}
+
+.modal-divider {
+  border: 0;
+  height: 1px;
+  background: linear-gradient(to right, var(--accent-purple), var(--accent-cyan), transparent);
+  margin: 1.5rem 0;
+}
+
+#modal-body {
+  line-height: 1.8;
+  color: var(--text-light);
+  font-size: 1.1rem;
+}
+
+#modal-body ul {
+  margin: 1.5rem 0;
+  padding-left: 1.5rem;
+}
+
+#modal-body li {
+  margin-bottom: 0.75rem;
+}
+
+.modal-footer {
+  margin-top: 2.5rem;
+  text-align: right;
 }
