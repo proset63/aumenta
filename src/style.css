@@ -168,32 +168,24 @@ ul {
 .logo {
   display: flex;
   align-items: center;
-  height: 80px; /* Base height */
-  overflow: visible;
+  height: 50px; /* Clean base height */
 }
 
 .main-logo {
-  height: 180%; /* Overflowing the container for more impact */
+  height: 100%;
   width: auto;
-  max-width: 450px;
+  max-width: 320px;
   object-fit: contain;
-  transform: scale(1.8); /* Zooming into the logo content */
-  transform-origin: left center;
   transition: var(--transition-normal);
   display: block;
 }
 
 @media (min-width: 1024px) {
-  .logo { height: 100px; }
-  .main-logo { 
-    max-width: 600px;
-    height: 220%;
-    transform: scale(2.2);
-  }
+  .logo { height: 60px; }
+  .main-logo { max-width: 400px; }
 }
 
-.navbar.scrolled .logo { height: 60px; }
-.navbar.scrolled .main-logo { transform: scale(1.6); }
+.navbar.scrolled .logo { height: 40px; }
 
 .navbar nav {
   display: flex;
