@@ -168,26 +168,26 @@ ul {
 .logo {
   display: flex;
   align-items: center;
-  height: 80px; /* Base container height */
+  height: 90px; /* Base mobile container height */
 }
 
 .main-logo {
   height: 100%;
   width: auto;
-  max-width: 400px;
+  max-width: 450px;
   object-fit: contain;
-  filter: invert(1); /* Turns black logo into white */
-  mix-blend-mode: screen; /* REMOVES ALL BACKGROUND ARTIFACTS */
+  filter: invert(1); /* Makes the logo white */
+  mix-blend-mode: screen; /* REMOVES ANY BACKGROUND BOX */
   transition: var(--transition-normal);
   display: block;
 }
 
 @media (min-width: 1024px) {
-  .logo { height: 120px; } /* Massive visibility */
-  .main-logo { max-width: 500px; }
+  .logo { height: 130px; } /* Massive visibility in desktop */
+  .main-logo { max-width: 550px; }
 }
 
-.navbar.scrolled .logo { height: 60px; }
+.navbar.scrolled .logo { height: 70px; }
 
 .navbar nav {
   display: flex;
