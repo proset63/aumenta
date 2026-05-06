@@ -171,20 +171,19 @@ ul {
 }
 
 .main-logo {
-  height: 32px;
+  height: 35px;
   width: auto;
-  filter: brightness(0) invert(1); /* Inverts the black logo to white */
   transition: var(--transition-normal);
 }
 
 @media (min-width: 1024px) {
   .main-logo {
-    height: 40px;
+    height: 45px;
   }
 }
 
 .navbar.scrolled .main-logo {
-  height: 28px;
+  height: 32px;
 }
 
 .navbar nav {
