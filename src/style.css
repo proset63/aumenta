@@ -168,24 +168,26 @@ ul {
 .logo {
   display: flex;
   align-items: center;
-  height: 50px; /* Clean base height */
+  height: 80px; /* Base container height */
 }
 
 .main-logo {
   height: 100%;
   width: auto;
-  max-width: 320px;
+  max-width: 400px;
   object-fit: contain;
+  filter: invert(1); /* Turns black logo into white */
+  mix-blend-mode: screen; /* REMOVES ALL BACKGROUND ARTIFACTS */
   transition: var(--transition-normal);
   display: block;
 }
 
 @media (min-width: 1024px) {
-  .logo { height: 60px; }
-  .main-logo { max-width: 400px; }
+  .logo { height: 120px; } /* Massive visibility */
+  .main-logo { max-width: 500px; }
 }
 
-.navbar.scrolled .logo { height: 40px; }
+.navbar.scrolled .logo { height: 60px; }
 
 .navbar nav {
   display: flex;
