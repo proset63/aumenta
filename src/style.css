@@ -171,19 +171,22 @@ ul {
 }
 
 .main-logo {
-  height: 35px;
+  height: 60px; /* Strong mobile presence */
   width: auto;
+  filter: brightness(0) invert(1); /* Invert black to white */
+  mix-blend-mode: screen; /* REMOVES ANY BLACK BOX/BACKGROUND */
   transition: var(--transition-normal);
+  display: block;
 }
 
 @media (min-width: 1024px) {
   .main-logo {
-    height: 45px;
+    height: 90px; /* Imposing desktop presence */
   }
 }
 
 .navbar.scrolled .main-logo {
-  height: 32px;
+  height: 50px;
 }
 
 .navbar nav {
