@@ -22,3 +22,18 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment & AI Assistant Files
+.env
+AIzaSyAA8i9LYTzNRz3ZSmJsglugpqcRsAKSMhc
+ai.key
+ai.model
+ai.provider
+assistant.cjs
+assistant.js
+config
+edit
+gemini-3-flash
+google_ai_studio
+scratch/
+set

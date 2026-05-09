@@ -1,5 +1,28 @@
 import './style.css';
 import { supabase } from './supabaseClient';
+// 1. Importamos la librería corregida
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+// --- Gemini 3 Integration (Google AI Studio) ---
+
+// Configuración de la API. 
+// Reemplaza 'TU_API_KEY_AQUÍ' por tu clave real de Google AI Studio.
+const genAI = new GoogleGenerativeAI("AIzaSyAA8i9LYTzNRz3ZSmJsglugpqcRsAKSMhc");
+const geminiModel = genAI.getGenerativeModel({ model: "gemini-3-flash" });
+
+/**
+ * Función genérica para usar Gemini 3 en tu proyecto
+ */
+async function askGemini(prompt: string) {
+  try {
+    const result = await geminiModel.generateContent(prompt);
+    const response = await result.response;
+    return response.text(); GoogleGenerativeAI
+  } catch (error) {
+    console.error("Error en Gemini 3:", error);
+    return "Lo siento, hubo un error al procesar la inteligencia artificial.";
+  }
+}
 
 // --- Supabase Data Loading ---
 
@@ -31,7 +54,6 @@ async function loadClients() {
 
   const grid = document.getElementById('clients-grid');
   if (grid && data && data.length > 0) {
-    // Filter duplicates by name to ensure each client only appears once
     const uniqueClients = data.filter((client, index, self) =>
       index === self.findIndex((c) => c.name === client.name)
     );
@@ -74,7 +96,6 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, observerOptions);
 
-// Observe all elements with animation classes
 const animatedElements = document.querySelectorAll('.fade-in, .fade-in-up, .fade-in-left, .fade-in-right, .scale-up');
 animatedElements.forEach(el => observer.observe(el));
 
@@ -84,7 +105,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     e.preventDefault();
     const targetId = this.getAttribute('href');
     if (!targetId || targetId === '#') return;
-    
+
     const targetElement = document.querySelector(targetId);
     if (targetElement) {
       targetElement.scrollIntoView({
@@ -94,37 +115,40 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   });
 });
 
-// Contact Form Handling
+// Contact Form Handling + IA Integration
 const contactForm = document.querySelector('.contact-form') as HTMLFormElement;
 if (contactForm) {
   contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const submitBtn = contactForm.querySelector('button[type="submit"]') as HTMLButtonElement;
     const originalText = submitBtn.innerText;
-    
-    // Get form data
+
     const formData = {
       name: (document.getElementById('name') as HTMLInputElement).value,
       email: (document.getElementById('email') as HTMLInputElement).value,
       message: (document.getElementById('message') as HTMLTextAreaElement).value,
     };
 
-    // Simulate sending + Supabase storage
     submitBtn.innerText = 'Enviando...';
     submitBtn.disabled = true;
-    
+
+    // Almacenamos en Supabase
     const { error } = await supabase.from('contact_leads').insert([formData]);
 
     if (error) {
       console.error('Error saving lead:', error);
       submitBtn.innerText = 'Error al enviar';
-      submitBtn.style.background = '#ef4444'; // Red
+      submitBtn.style.background = '#ef4444';
     } else {
+      // OPCIONAL: Usamos Gemini 3 para analizar el sentimiento o responder algo rápido
+      const aiResponse = await askGemini(`Un cliente llamado ${formData.name} envió un mensaje: "${formData.message}". Responde en una frase corta agradeciendo el interés.`);
+      console.log("IA Feedback:", aiResponse);
+
       submitBtn.innerText = '¡Enviado con éxito!';
-      submitBtn.style.background = '#10b981'; // Green
+      submitBtn.style.background = '#10b981';
       contactForm.reset();
     }
-    
+
     setTimeout(() => {
       submitBtn.innerText = originalText;
       submitBtn.disabled = false;
@@ -133,61 +157,24 @@ if (contactForm) {
   });
 }
 
-
 // --- Modal System Logic ---
 
 const techInfo = {
   'card-ar': {
     title: 'Realidad Aumentada (RA) Industrial',
-    content: `
-      <p>Según los documentos de Aumenta Solutions, la <strong>Realidad Aumentada (RA)</strong> es una tecnología que permite superponer información gráfica y modelos 3D sobre el entorno real.</p>
-      <p><strong>Servicios destacados:</strong></p>
-      <ul>
-        <li>Formación y manuales virtuales sobre equipos reales.</li>
-        <li>Asistencia remota experta en tiempo real con smartglasses.</li>
-        <li>Información geolocalizada conectada a CRM/ERP.</li>
-      </ul>
-      <p><strong>Beneficio clave:</strong> Disminuye drásticamente la curva de aprendizaje y permite operar con manos libres, mejorando la seguridad y eficiencia.</p>
-    `
+    content: `<p>La Realidad Aumentada (RA) industrial transforma la colaboración entre humanos y máquinas al superponer guías de producción y calidad directamente en el entorno físico del operador. Esta tecnología optimiza las tareas de mantenimiento al agilizar los tiempos de inspección de calidad y reducir significativamente los errores manuales y de incorporación. Como resultado de estos flujos de trabajo más intuitivos, las empresas logran minimizar los tiempos de inactividad en la planta e incrementar la productividad y eficiencia operativa general.</p>`
   },
   'card-dt': {
     title: 'Gemelos Digitales e IoT',
-    content: `
-      <p>Aumenta Solutions emplea los <strong>Gemelos Digitales</strong> como réplicas virtuales exactas de instalaciones físicas, como plantas de energía solar.</p>
-      <p><strong>Capacidades:</strong></p>
-      <ul>
-        <li>Supervisión remota 360º de operaciones.</li>
-        <li>Control centralizado de alarmas y alertas en tiempo real.</li>
-        <li>Simulación de escenarios para identificar errores de diseño.</li>
-      </ul>
-      <p><strong>Beneficio clave:</strong> Optimiza el mantenimiento y permite la toma de decisiones basada en datos reales sin desplazamientos físicos.</p>
-    `
+    content: `<p>Los Gemelos Digitales interactúan con sensores IoT para crear réplicas virtuales precisas que se sincronizan bidireccionalmente y en tiempo real con los equipos físicos. Este flujo constante de telemetría permite ejecutar estrategias de mantenimiento predictivo, utilizando análisis de inteligencia artificial para identificar patrones de degradación y predecir fallos antes de que ocurran. Con estas simulaciones, las instalaciones industriales pueden programar intervenciones de forma óptima, lo que reduce drásticamente el tiempo de inactividad no planificado y prolonga la vida útil de los activos críticos.</p>`
   },
   'card-mr': {
     title: 'Realidad Mixta y Hologramas',
-    content: `
-      <p>La <strong>Realidad Mixta (MR)</strong> combina el mundo físico con objetos virtuales interactivos. Un caso de éxito es el simulador de diálisis del Hospital de Bellvitge.</p>
-      <p><strong>Tecnología única:</strong></p>
-      <ul>
-        <li>Distribución exclusiva de pantallas holográficas <strong>Looking Glass</strong> (8K volumétrico sin gafas).</li>
-        <li>Teletransportación de ponentes para eventos corporativos.</li>
-        <li>Control gestual sin contacto mediante sensores Leap Motion.</li>
-      </ul>
-      <p><strong>Beneficio clave:</strong> Genera un impacto visual inigualable y permite interacciones naturales con modelos 3D complejos.</p>
-    `
+    content: `<p>La pantalla inmersiva Looking Glass 8K redefine la visualización holográfica al generar impresionantes 33,2 millones de píxeles y más de mil millones de colores a 60 Hz. Su motor principal es una tecnología patentada de campo de luz de 45 elementos que permite proyectar de forma colaborativa escenas tridimensionales estereoscópicas con verdadera profundidad. El beneficio técnico más disruptivo es que permite a grupos de personas visualizar e interactuar con estos hologramas sin la fricción de requerir gafas o visores de realidad virtual o aumentada.</p>`
   },
   'card-ai': {
     title: 'Inteligencia Artificial Predictiva',
-    content: `
-      <p>La IA en Aumenta Solutions dota a los entornos virtuales de capacidades analíticas avanzadas para el análisis de grandes volúmenes de datos.</p>
-      <p><strong>Aplicaciones:</strong></p>
-      <ul>
-        <li>Mantenimiento predictivo mediante Machine Learning (TensorFlow).</li>
-        <li>Análisis de tendencias y detección anticipada de fallos.</li>
-        <li>Asistentes virtuales inteligentes y adaptativos.</li>
-      </ul>
-      <p><strong>Beneficio clave:</strong> Transforma la gestión reactiva en proactiva, anticipando incidencias antes de que ocurran.</p>
-    `
+    content: `<p>La Inteligencia Artificial predictiva eleva el nivel de inmersión al integrar avatares generados por IA y asistentes conversacionales directamente en plataformas de Realidad Virtual e interfaces digitales. Estos sistemas utilizan procesamiento de lenguaje natural integrado a modelos de lenguaje grande (LLM) para generar conversaciones adaptables en tiempo real, facilitando desde simulaciones complejas hasta el triaje interactivo en la atención médica. Al crear estos espacios inteligentes y adaptativos, las organizaciones logran optimizar el aprendizaje libre de presiones e impulsar una asistencia ágil basada en análisis de datos continuos.</p>`
   }
 };
 
@@ -195,13 +182,22 @@ const modal = document.getElementById('tech-modal');
 const modalTitle = document.getElementById('modal-title');
 const modalBody = document.getElementById('modal-body');
 
-function openModal(cardId: string) {
+async function openModal(cardId: string) {
   const info = techInfo[cardId as keyof typeof techInfo];
   if (info && modalTitle && modalBody) {
     modalTitle.innerText = info.title;
-    modalBody.innerHTML = info.content;
+    modalBody.innerHTML = '<div class="loading-spinner"></div><p>Generando información técnica detallada...</p>';
     modal?.classList.add('active');
     document.body.style.overflow = 'hidden';
+
+    // Simular un tiempo de procesamiento para mejorar la experiencia "IA"
+    setTimeout(() => {
+      if (modalBody) {
+        modalBody.innerHTML = info.content;
+        modalBody.classList.add('fade-in');
+        modalBody.classList.add('visible');
+      }
+    }, 800);
   }
 }
 
@@ -210,18 +206,13 @@ function closeModal() {
   document.body.style.overflow = '';
 }
 
-// Global click delegation
 document.addEventListener('click', (e) => {
   const target = e.target as HTMLElement;
-  
-  // Find the closest parent with a card ID
   const card = target.closest('.feature-card');
   if (card && card.id && techInfo[card.id as keyof typeof techInfo]) {
     openModal(card.id);
     return;
   }
-
-  // Close modal logic
   if (target.classList.contains('close-modal') || target.classList.contains('close-btn') || target === modal) {
     closeModal();
   }
