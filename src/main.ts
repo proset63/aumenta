@@ -8,7 +8,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 // Configuración de la API. 
 // Reemplaza 'TU_API_KEY_AQUÍ' por tu clave real de Google AI Studio.
 const genAI = new GoogleGenerativeAI("AIzaSyBQA1NnVMrb0PgUG56g8aCeM8oLaf-CsPk");
-const geminiModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+const geminiModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
 
 /**
  * Función genérica para usar Gemini 3 en tu proyecto
