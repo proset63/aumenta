@@ -17,7 +17,11 @@ async function askGemini(prompt: string) {
   try {
     const result = await geminiModel.generateContent(prompt);
     const response = await result.response;
-    return response.text(); GoogleGenerativeAI
+    // Log token usage for monitoring
+    if (response.usageMetadata) {
+      console.log("Tokens usados:", response.usageMetadata);
+    }
+    return response.text();
   } catch (error) {
     console.error("Error en Gemini 3:", error);
     return "Lo siento, hubo un error al procesar la inteligencia artificial.";
